@@ -422,7 +422,7 @@ textarea.big {
       <h2>Prístup riaditeľa</h2>
       <div class="field">
         <label>Heslo</label>
-        <input type="password" id="admin-pw" placeholder="Zadajte heslo..." onkeydown="if(event.key==='Enter') adminLogin()">
+        <input type="password" id="admin-pw" placeholder="Zadajte heslo..." onkeydown="if(event.key==='Enter') adminLogin()" autofocus>
       </div>
       <div class="err" id="admin-login-err"></div>
       <button class="btn btn-primary" id="login-btn" onclick="adminLogin()">Prihlásiť sa</button>
