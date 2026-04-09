@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Schránka nápadov – ZŠ s MŠ Višňové 446</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
@@ -33,32 +32,55 @@ body {
   min-height: 100dvh;
 }
 
-/* ── SCREENS ── */
 .screen { display: none; min-height: 100dvh; flex-direction: column; }
 .screen.active { display: flex; }
 
-/* ── SETUP ── */
-#screen-setup {
+/* ── ROLE SCREEN ── */
+#screen-role {
   justify-content: center;
   align-items: center;
   padding: 24px;
   gap: 20px;
 }
-.setup-logo {
-  text-align: center;
+.role-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
 }
-.setup-logo h1 {
+.role-btn {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
+}
+.role-btn:active { transform: scale(0.97); }
+.role-btn.role-student { border-color: #f5a623; }
+.role-btn.role-student:hover { background: #fffbf0; }
+.role-btn.role-parent { border-color: var(--accent2); }
+.role-btn.role-parent:hover { background: #f0faf6; }
+.role-btn.role-teacher { border-color: #6b7ddc; }
+.role-btn.role-teacher:hover { background: #f0f2ff; }
+.role-btn.role-admin { border-color: var(--accent); }
+.role-btn.role-admin:hover { background: #fff5f2; }
+.role-icon { font-size: 2rem; }
+.role-info { text-align: left; }
+.role-name {
   font-family: 'Fredoka', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
 }
-.setup-logo p {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-top: 4px;
-}
+.role-desc { font-size: 0.8rem; color: var(--muted); }
+
+/* ── SHARED ── */
 .card {
   background: var(--surface);
   border: 1.5px solid var(--border);
@@ -119,55 +141,8 @@ input:focus, textarea:focus {
 .btn-secondary { background: var(--muted-bg); color: var(--text); border: 1.5px solid var(--border); }
 .err { color: var(--accent); font-size: 0.82rem; margin-top: 8px; min-height: 18px; }
 
-/* ── ROLE SCREEN ── */
-#screen-role {
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-  gap: 20px;
-}
-.role-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 400px;
-}
-.role-btn {
-  background: var(--surface);
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px 22px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  transition: all 0.15s;
-  box-shadow: var(--shadow);
-}
-.role-btn:active { transform: scale(0.97); }
-.role-btn.role-student { border-color: #f5a623; }
-.role-btn.role-student:hover { background: #fffbf0; }
-.role-btn.role-parent { border-color: var(--accent2); }
-.role-btn.role-parent:hover { background: #f0faf6; }
-.role-btn.role-teacher { border-color: #6b7ddc; }
-.role-btn.role-teacher:hover { background: #f0f2ff; }
-.role-btn.role-admin { border-color: var(--accent); }
-.role-btn.role-admin:hover { background: #fff5f2; }
-.role-icon { font-size: 2rem; }
-.role-info { text-align: left; }
-.role-name {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--text);
-}
-.role-desc { font-size: 0.8rem; color: var(--muted); }
-
 /* ── FORM SCREEN ── */
-#screen-form {
-  flex-direction: column;
-}
+#screen-form { flex-direction: column; }
 .app-bar {
   padding: 16px 20px;
   display: flex;
@@ -214,9 +189,8 @@ input:focus, textarea:focus {
   width: fit-content;
 }
 .tag-student { background: #fff3dc; color: #b07010; }
-.tag-parent { background: #e8f8f1; color: #1a7a52; }
+.tag-parent  { background: #e8f8f1; color: #1a7a52; }
 .tag-teacher { background: #eef0ff; color: #3d4ec0; }
-
 .form-hint {
   background: var(--muted-bg);
   border-radius: 12px;
@@ -226,7 +200,6 @@ input:focus, textarea:focus {
   line-height: 1.5;
 }
 .form-hint strong { color: var(--text); }
-
 textarea.big {
   min-height: 140px;
   resize: vertical;
@@ -238,7 +211,6 @@ textarea.big {
   text-align: right;
   margin-top: -10px;
 }
-
 .success-screen {
   display: none;
   flex-direction: column;
@@ -253,19 +225,22 @@ textarea.big {
 .success-screen.visible { display: flex; }
 @keyframes pop-in {
   from { transform: scale(0.6); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  to   { transform: scale(1);   opacity: 1; }
 }
-.success-icon { font-size: 5rem; }
-.success-title {
-  font-family: 'Fredoka', sans-serif;
-  font-size: 1.8rem;
-  color: var(--accent2);
+.success-icon  { font-size: 5rem; }
+.success-title { font-family: 'Fredoka', sans-serif; font-size: 1.8rem; color: var(--accent2); }
+.success-sub   { color: var(--muted); font-size: 1rem; max-width: 280px; line-height: 1.6; }
+
+/* ── ADMIN LOGIN ── */
+#screen-admin-login {
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  gap: 20px;
 }
-.success-sub { color: var(--muted); font-size: 1rem; max-width: 280px; line-height: 1.6; }
 
 /* ── ADMIN SCREEN ── */
 #screen-admin { flex-direction: column; }
-
 .admin-bar {
   padding: 14px 20px;
   background: var(--text);
@@ -291,7 +266,6 @@ textarea.big {
   padding: 6px 12px;
   font-weight: 700;
 }
-
 .admin-filters {
   padding: 12px 16px;
   display: flex;
@@ -314,12 +288,7 @@ textarea.big {
   white-space: nowrap;
   transition: all 0.15s;
 }
-.filter-btn.active {
-  background: var(--text);
-  color: #fff;
-  border-color: var(--text);
-}
-
+.filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
 .admin-list {
   flex: 1;
   overflow-y: auto;
@@ -328,19 +297,14 @@ textarea.big {
   flex-direction: column;
   gap: 12px;
 }
-
 .namet-card {
   background: var(--surface);
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
   box-shadow: 0 2px 8px rgba(100,70,30,0.06);
-  transition: box-shadow 0.15s;
 }
-.namet-card.stav-vybavene {
-  opacity: 0.65;
-  border-style: dashed;
-}
+.namet-card.stav-vybavene { opacity: 0.65; border-style: dashed; }
 .namet-header {
   display: flex;
   align-items: center;
@@ -349,44 +313,17 @@ textarea.big {
   gap: 8px;
   flex-wrap: wrap;
 }
-.namet-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.namet-rola {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 99px;
-}
-.namet-meno {
-  font-size: 0.82rem;
-  color: var(--muted);
-  font-weight: 600;
-}
-.namet-time {
-  font-size: 0.75rem;
-  color: var(--muted);
-}
+.namet-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.namet-rola { font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.namet-meno { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+.namet-time { font-size: 0.75rem; color: var(--muted); }
 .namet-stav {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 99px;
-  background: #fff3dc;
-  color: #b07010;
+  font-size: 0.72rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px;
+  background: #fff3dc; color: #b07010;
 }
 .namet-stav.vybavene { background: #e8f8f1; color: #1a7a52; }
-
-.namet-text {
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-
+.namet-text { font-size: 0.95rem; line-height: 1.6; color: var(--text); margin-bottom: 12px; }
 .namet-odpoved {
   background: #f0faf6;
   border-left: 3px solid var(--accent2);
@@ -398,12 +335,7 @@ textarea.big {
   line-height: 1.5;
 }
 .namet-odpoved strong { display: block; font-size: 0.75rem; margin-bottom: 4px; opacity: 0.7; }
-
-.namet-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+.namet-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .action-btn {
   border: 1.5px solid var(--border);
   border-radius: 10px;
@@ -418,92 +350,27 @@ textarea.big {
 }
 .action-btn:active { transform: scale(0.95); }
 .action-btn.green { background: #e8f8f1; color: #1a7a52; border-color: #a8d8c0; }
-.action-btn.red { background: #ffeee8; color: #c0341a; border-color: #f5b8a8; }
-.action-btn.blue { background: #eef0ff; color: #3d4ec0; border-color: #b8bef0; }
-
-.reply-form {
-  display: none;
-  margin-top: 10px;
-  gap: 8px;
-  flex-direction: column;
-}
+.action-btn.red   { background: #ffeee8; color: #c0341a; border-color: #f5b8a8; }
+.action-btn.blue  { background: #eef0ff; color: #3d4ec0; border-color: #b8bef0; }
+.reply-form { display: none; margin-top: 10px; gap: 8px; flex-direction: column; }
 .reply-form.visible { display: flex; }
-.reply-form textarea {
-  min-height: 70px;
-  font-size: 0.9rem;
-}
-
-.admin-empty {
-  text-align: center;
-  padding: 48px 24px;
-  color: var(--muted);
-}
+.reply-form textarea { min-height: 70px; font-size: 0.9rem; }
+.admin-empty { text-align: center; padding: 48px 24px; color: var(--muted); }
 .admin-empty .icon { font-size: 3rem; margin-bottom: 12px; }
-
-/* ── ADMIN LOGIN ── */
-#screen-admin-login {
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
-  gap: 20px;
-}
-
-/* ── LOADING ── */
-.loading {
-  text-align: center;
-  padding: 32px;
-  color: var(--muted);
-  font-size: 0.9rem;
-}
-
-/* Badge counts */
+.loading { text-align: center; padding: 32px; color: var(--muted); font-size: 0.9rem; }
 .count-badge {
-  background: var(--accent);
-  color: #fff;
-  border-radius: 99px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 2px 7px;
-  margin-left: 4px;
+  background: var(--accent); color: #fff;
+  border-radius: 99px; font-size: 0.7rem;
+  font-weight: 700; padding: 2px 7px; margin-left: 4px;
 }
 </style>
 </head>
 <body>
 
-<!-- ══════ SETUP ══════ -->
-<div class="screen active" id="screen-setup">
-  <div style="padding:16px 20px;border-bottom:1.5px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;width:100%;">
-    <div style="font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:600;">⚙️ Nastavenia</div>
-    <button class="back-btn" id="setup-back-btn" onclick="showScreen('role')" style="display:none;">← Späť</button>
-  </div>
-  <div class="setup-logo" style="margin-top:20px;">
-    <div style="font-size:3rem;">💡</div>
-    <h1>Schránka nápadov</h1>
-    <p>ZŠ s MŠ Višňové 446</p>
-  </div>
-  <div class="card">
-    <h2>⚙️ Nastavenie pripojenia</h2>
-    <div class="field">
-      <label>Supabase URL</label>
-      <input type="text" id="cfg-url" placeholder="https://xxxx.supabase.co" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="field">
-      <label>Supabase Anon Key</label>
-      <input type="password" id="cfg-key" placeholder="eyJ..." autocomplete="off" spellcheck="false">
-    </div>
-    <div class="err" id="setup-err"></div>
-    <button class="btn btn-primary" id="setup-btn" onclick="saveConfig()">Pokračovať →</button>
-  </div>
-  <div style="font-size:0.75rem;color:var(--muted);text-align:center;max-width:320px;line-height:1.6;">
-    Údaje nájdete v Supabase → Settings → API Keys.<br>Ukladajú sa len v tomto zariadení.
-  </div>
-</div>
-
 <!-- ══════ ROLE ══════ -->
-<div class="screen" id="screen-role">
+<div class="screen active" id="screen-role">
   <div style="padding:20px;border-bottom:1.5px solid var(--border);background:var(--surface);display:flex;justify-content:space-between;align-items:center;">
     <div style="font-family:'Fredoka',sans-serif;font-size:1.3rem;font-weight:600;">💡 Schránka nápadov</div>
-    <button class="back-btn" onclick="showSetup()" id="role-settings-btn" style="display:none;">Nastavenia</button>
   </div>
   <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;gap:20px;">
     <div style="text-align:center;">
@@ -558,11 +425,7 @@ textarea.big {
         <input type="password" id="admin-pw" placeholder="Zadajte heslo..." onkeydown="if(event.key==='Enter') adminLogin()">
       </div>
       <div class="err" id="admin-login-err"></div>
-      <button class="btn btn-primary" onclick="adminLogin()">Prihlásiť sa</button>
-    </div>
-    <div style="font-size:0.78rem;color:var(--muted);text-align:center;">
-      Predvolené heslo: <strong>riaditel2024</strong><br>
-      <span style="font-size:0.72rem;">(Zmeňte ho v kóde aplikácie)</span>
+      <button class="btn btn-primary" id="login-btn" onclick="adminLogin()">Prihlásiť sa</button>
     </div>
   </div>
 </div>
@@ -576,22 +439,18 @@ textarea.big {
 
   <div class="form-body" id="form-body">
     <div id="role-tag-container"></div>
-
     <div class="form-hint">
       <strong>Vaše nápady sú dôležité!</strong> Napíšte čokoľvek – nápad na zlepšenie školy, podnet, pochvalu alebo pripomienku. Meno uvádzať nemusíte.
     </div>
-
     <div class="field">
       <label>Meno (nepovinné)</label>
       <input type="text" id="form-meno" placeholder="Môžete zostať v anonymite..." maxlength="60">
     </div>
-
     <div class="field">
       <label>Váš nápad alebo podnet *</label>
       <textarea class="big" id="form-sprava" placeholder="Napíšte sem váš nápad, podnet, pripomienku alebo pochvalu..." maxlength="1000" oninput="updateCharCount()"></textarea>
       <div class="char-count"><span id="char-count">0</span> / 1000</div>
     </div>
-
     <button class="btn btn-primary" id="form-send-btn" onclick="sendNamet()">📬 Odoslať nápad</button>
     <div class="err" id="form-err"></div>
   </div>
@@ -609,15 +468,13 @@ textarea.big {
 <div class="screen" id="screen-admin">
   <div class="admin-bar">
     <div class="admin-bar-title">🔐 Správa schránky</div>
-    <button class="admin-bar-back" onclick="showScreen('role')">← Odhlásiť</button>
+    <button class="admin-bar-back" onclick="adminLogout()">← Odhlásiť</button>
   </div>
-
   <div class="admin-filters">
     <button class="filter-btn active" onclick="setFilter('všetky', this)">Všetky <span class="count-badge" id="badge-all">0</span></button>
     <button class="filter-btn" onclick="setFilter('nové', this)">Nové <span class="count-badge" id="badge-nove" style="background:var(--accent3);color:#fff;">0</span></button>
     <button class="filter-btn" onclick="setFilter('vybavené', this)">Vybavené <span class="count-badge" id="badge-vybavene" style="background:var(--accent2);">0</span></button>
   </div>
-
   <div class="admin-list" id="admin-list">
     <div class="loading">Načítavam nápady...</div>
   </div>
@@ -625,60 +482,17 @@ textarea.big {
 
 <script>
 // ════════════════════════════════
-//  CONFIG & STATE
+//  CONFIG  ← jediný riadok na zmenu
 // ════════════════════════════════
-let sb = null;
-let currentRole = null;
-let adminFilter = 'všetky';
-let allNamety = [];
-const TABLE = 'schranka_napadov';
-const ADMIN_PASSWORD = 'riaditel2024';
-const SUPABASE_URL = 'https://nhloasdtjbbwmobhvufh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5obG9hc2R0amJid21vYmh2dWZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTM0OTAsImV4cCI6MjA4OTc2OTQ5MH0.IYggGJNOp5KpUezkLRXfhnCappcYdRBD0fQB_AUiOrU';
+const WORKER_URL = 'https://schranka-napadov.jasimko.workers.dev/';
 
 // ════════════════════════════════
-//  SETUP
+//  STATE
 // ════════════════════════════════
-async function saveConfig() {
-  const url = document.getElementById('cfg-url').value.trim();
-  const key = document.getElementById('cfg-key').value.trim();
-  const err = document.getElementById('setup-err');
-  const btn = document.getElementById('setup-btn');
-
-  if (!url.startsWith('https://') || !url.includes('supabase.co')) {
-    err.textContent = 'Skontrolujte formát URL';
-    return;
-  }
-  if (key.length < 10) {
-    err.textContent = 'Kľúč je príliš krátky';
-    return;
-  }
-
-  err.textContent = '';
-  btn.textContent = 'Testujem...';
-  btn.disabled = true;
-
-  try {
-    sb = window.supabase.createClient(url, key);
-    const { error } = await sb.from(TABLE).select('id').limit(1);
-    if (error && error.code !== 'PGRST116') throw error;
-    localStorage.setItem('sn_url', url);
-    localStorage.setItem('sn_key', key);
-    document.getElementById('setup-back-btn').style.display = 'block';
-    showScreen('role');
-  } catch(e) {
-    err.textContent = 'Chyba: ' + (e.message || 'Skontrolujte URL a kľúč');
-    alert('Chyba pripojenia:\n' + (e.message || JSON.stringify(e)));
-  } finally {
-    btn.textContent = 'Pokračovať →';
-    btn.disabled = false;
-  }
-}
-
-function loadConfig() {
-  sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-  return true;
-}
+let currentRole   = null;
+let adminToken    = null;   // heslo sa drží len v pamäti (nie localStorage)
+let adminFilter   = 'všetky';
+let allNamety     = [];
 
 // ════════════════════════════════
 //  NAVIGATION
@@ -687,15 +501,13 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
 }
-function showSetup() { showScreen('setup'); }
 
 function chooseRole(role) {
   currentRole = role;
-  // Set role tag
   const tagMap = {
-    'žiak': { cls: 'tag-student', icon: '🎒', label: 'Žiak' },
-    'rodič': { cls: 'tag-parent', icon: '👨‍👩‍👧', label: 'Rodič' },
-    'učiteľ': { cls: 'tag-teacher', icon: '📚', label: 'Učiteľ' },
+    'žiak':   { cls: 'tag-student', icon: '🎒',      label: 'Žiak' },
+    'rodič':  { cls: 'tag-parent',  icon: '👨‍👩‍👧',    label: 'Rodič' },
+    'učiteľ': { cls: 'tag-teacher', icon: '📚',      label: 'Učiteľ' },
   };
   const t = tagMap[role];
   document.getElementById('role-tag-container').innerHTML =
@@ -710,14 +522,44 @@ function showAdminLogin() {
   showScreen('admin-login');
 }
 
-function adminLogin() {
-  const pw = document.getElementById('admin-pw').value;
-  if (pw === ADMIN_PASSWORD) {
-    showScreen('admin');
-    loadNamety();
-  } else {
-    document.getElementById('admin-login-err').textContent = 'Nesprávne heslo';
-    document.getElementById('admin-pw').value = '';
+function adminLogout() {
+  adminToken = null;
+  showScreen('role');
+}
+
+// ════════════════════════════════
+//  ADMIN LOGIN  (overenie na serveri)
+// ════════════════════════════════
+async function adminLogin() {
+  const pw  = document.getElementById('admin-pw').value;
+  const err = document.getElementById('admin-login-err');
+  const btn = document.getElementById('login-btn');
+
+  err.textContent = '';
+  btn.disabled = true;
+  btn.textContent = 'Overujem...';
+
+  try {
+    const res  = await fetch(`${WORKER_URL}/login`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ password: pw }),
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      adminToken = pw;   // uložíme len v RAM
+      showScreen('admin');
+      loadNamety();
+    } else {
+      err.textContent = 'Nesprávne heslo';
+      document.getElementById('admin-pw').value = '';
+    }
+  } catch (e) {
+    err.textContent = 'Chyba spojenia: ' + e.message;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Prihlásiť sa';
   }
 }
 
@@ -725,79 +567,77 @@ function adminLogin() {
 //  FORM
 // ════════════════════════════════
 function updateCharCount() {
-  const len = document.getElementById('form-sprava').value.length;
-  document.getElementById('char-count').textContent = len;
+  document.getElementById('char-count').textContent =
+    document.getElementById('form-sprava').value.length;
 }
 
 function resetForm() {
-  document.getElementById('form-meno').value = '';
+  document.getElementById('form-meno').value   = '';
   document.getElementById('form-sprava').value = '';
   document.getElementById('form-err').textContent = '';
   document.getElementById('char-count').textContent = '0';
   document.getElementById('form-body').style.display = 'flex';
   document.getElementById('success-screen').classList.remove('visible');
-  document.getElementById('form-send-btn').textContent = '📬 Odoslať nápad';
-  document.getElementById('form-send-btn').disabled = false;
+  const btn = document.getElementById('form-send-btn');
+  btn.textContent = '📬 Odoslať nápad';
+  btn.disabled    = false;
 }
 
 async function sendNamet() {
-  const meno = document.getElementById('form-meno').value.trim();
+  const meno   = document.getElementById('form-meno').value.trim();
   const sprava = document.getElementById('form-sprava').value.trim();
-  const err = document.getElementById('form-err');
-  const btn = document.getElementById('form-send-btn');
+  const err    = document.getElementById('form-err');
+  const btn    = document.getElementById('form-send-btn');
 
-  if (!sprava) {
-    err.textContent = 'Prosím napíšte váš nápad';
-    return;
-  }
+  if (!sprava) { err.textContent = 'Prosím napíšte váš nápad'; return; }
 
   err.textContent = '';
-  btn.disabled = true;
+  btn.disabled    = true;
   btn.textContent = '⏳ Odosielam...';
 
   try {
-    const { error } = await sb.from(TABLE).insert({
-      meno: meno || null,
-      rola: currentRole,
-      sprava: sprava,
-      stav: 'nové'
+    const res  = await fetch(`${WORKER_URL}/submit`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ meno: meno || null, rola: currentRole, sprava }),
     });
-    if (error) throw error;
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.error || 'Neznáma chyba');
 
     document.getElementById('form-body').style.display = 'none';
     document.getElementById('success-screen').classList.add('visible');
-  } catch(e) {
-    err.textContent = 'Chyba: ' + (e.message || 'Skúste znova');
-    btn.disabled = false;
+  } catch (e) {
+    err.textContent = 'Chyba: ' + e.message;
+    btn.disabled    = false;
     btn.textContent = '📬 Odoslať nápad';
   }
 }
 
 // ════════════════════════════════
-//  ADMIN
+//  ADMIN – načítanie
 // ════════════════════════════════
 async function loadNamety() {
   const list = document.getElementById('admin-list');
   list.innerHTML = '<div class="loading">Načítavam...</div>';
 
   try {
-    const { data, error } = await sb.from(TABLE).select('*').order('vytvorene', { ascending: false });
-    if (error) throw error;
-    allNamety = data || [];
+    const res  = await fetch(`${WORKER_URL}/ideas`, {
+      headers: { 'Authorization': `Bearer ${adminToken}` },
+    });
+    if (res.status === 403) { adminLogout(); return; }
+    const data = await res.json();
+    allNamety = Array.isArray(data) ? data : [];
     updateBadges();
     renderNamety();
-  } catch(e) {
+  } catch (e) {
     list.innerHTML = '<div class="loading">Chyba: ' + e.message + '</div>';
   }
 }
 
 function updateBadges() {
-  const all = allNamety.length;
-  const nove = allNamety.filter(n => n.stav === 'nové').length;
-  const vybavene = allNamety.filter(n => n.stav === 'vybavené').length;
-  document.getElementById('badge-all').textContent = all;
-  document.getElementById('badge-nove').textContent = nove;
-  document.getElementById('badge-vybavene').textContent = vybavene;
+  document.getElementById('badge-all').textContent      = allNamety.length;
+  document.getElementById('badge-nove').textContent     = allNamety.filter(n => n.stav === 'nové').length;
+  document.getElementById('badge-vybavene').textContent = allNamety.filter(n => n.stav === 'vybavené').length;
 }
 
 function setFilter(f, btn) {
@@ -809,10 +649,9 @@ function setFilter(f, btn) {
 
 function renderNamety() {
   const list = document.getElementById('admin-list');
-  let filtered = allNamety;
-  if (adminFilter !== 'všetky') {
-    filtered = allNamety.filter(n => n.stav === adminFilter);
-  }
+  const filtered = adminFilter === 'všetky'
+    ? allNamety
+    : allNamety.filter(n => n.stav === adminFilter);
 
   if (filtered.length === 0) {
     list.innerHTML = `<div class="admin-empty"><div class="icon">📭</div><div>Žiadne nápady v tejto kategórii</div></div>`;
@@ -820,19 +659,18 @@ function renderNamety() {
   }
 
   const rolaTag = {
-    'žiak': '<span class="namet-rola tag-student">🎒 Žiak</span>',
-    'rodič': '<span class="namet-rola tag-parent">👨‍👩‍👧 Rodič</span>',
+    'žiak':   '<span class="namet-rola tag-student">🎒 Žiak</span>',
+    'rodič':  '<span class="namet-rola tag-parent">👨‍👩‍👧 Rodič</span>',
     'učiteľ': '<span class="namet-rola tag-teacher">📚 Učiteľ</span>',
   };
 
   list.innerHTML = filtered.map(n => {
-    const date = new Date(n.vytvorene);
-    const dateStr = date.toLocaleDateString('sk-SK', { day:'numeric', month:'short', year:'numeric' }) +
-                    ' ' + date.toLocaleTimeString('sk-SK', { hour:'2-digit', minute:'2-digit' });
+    const date    = new Date(n.vytvorene);
+    const dateStr = date.toLocaleDateString('sk-SK', { day:'numeric', month:'short', year:'numeric' })
+                  + ' ' + date.toLocaleTimeString('sk-SK', { hour:'2-digit', minute:'2-digit' });
     const stavBadge = n.stav === 'vybavené'
       ? '<span class="namet-stav vybavene">✓ Vybavené</span>'
       : '<span class="namet-stav">● Nové</span>';
-    const odpDivVisible = n.odpoved ? 'display:block' : 'display:none';
 
     return `
     <div class="namet-card stav-${n.stav}" id="card-${n.id}">
@@ -847,22 +685,22 @@ function renderNamety() {
         </div>
       </div>
       <div class="namet-text">${escHtml(n.sprava)}</div>
-      <div class="namet-odpoved" id="odpoved-${n.id}" style="${odpDivVisible}">
-        <strong>Odpoveď riaditeľa:</strong>
-        ${n.odpoved ? escHtml(n.odpoved) : ''}
-      </div>
+      ${n.odpoved ? `
+      <div class="namet-odpoved">
+        <strong>Odpoveď riaditeľa:</strong>${escHtml(n.odpoved)}
+      </div>` : ''}
       <div class="namet-actions">
         ${n.stav !== 'vybavené'
           ? `<button class="action-btn green" onclick="markVybavene(${n.id})">✓ Vybavené</button>`
           : `<button class="action-btn" onclick="markNove(${n.id})">↩ Označiť ako nové</button>`}
         <button class="action-btn blue" onclick="toggleReply(${n.id})">💬 Odpovedať</button>
-        <button class="action-btn red" onclick="deleteNamet(${n.id})">🗑 Vymazať</button>
+        <button class="action-btn red"  onclick="deleteNamet(${n.id})">🗑 Vymazať</button>
       </div>
       <div class="reply-form" id="reply-${n.id}">
-        <textarea placeholder="Napíšte odpoveď..." maxlength="500" id="reply-text-${n.id}">${n.odpoved || ''}</textarea>
+        <textarea placeholder="Napíšte odpoveď..." maxlength="500" id="reply-text-${n.id}">${n.odpoved ? escHtml(n.odpoved) : ''}</textarea>
         <div style="display:flex;gap:8px;">
           <button class="action-btn green" onclick="saveReply(${n.id})">Uložiť odpoveď</button>
-          <button class="action-btn" onclick="toggleReply(${n.id})">Zrušiť</button>
+          <button class="action-btn"       onclick="toggleReply(${n.id})">Zrušiť</button>
         </div>
       </div>
     </div>`;
@@ -870,42 +708,41 @@ function renderNamety() {
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
 }
 
 function toggleReply(id) {
-  const el = document.getElementById('reply-' + id);
-  el.classList.toggle('visible');
+  document.getElementById('reply-' + id).classList.toggle('visible');
 }
 
-async function markVybavene(id) {
-  await sb.from(TABLE).update({ stav: 'vybavené' }).eq('id', id);
+// ════════════════════════════════
+//  ADMIN – mutácie
+// ════════════════════════════════
+async function workerPatch(id, body) {
+  await fetch(`${WORKER_URL}/ideas/${id}`, {
+    method:  'PATCH',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+    body:    JSON.stringify(body),
+  });
   await loadNamety();
 }
 
-async function markNove(id) {
-  await sb.from(TABLE).update({ stav: 'nové' }).eq('id', id);
-  await loadNamety();
-}
+async function markVybavene(id) { await workerPatch(id, { stav: 'vybavené' }); }
+async function markNove(id)     { await workerPatch(id, { stav: 'nové' }); }
 
 async function saveReply(id) {
   const text = document.getElementById('reply-text-' + id).value.trim();
-  await sb.from(TABLE).update({ odpoved: text || null }).eq('id', id);
-  await loadNamety();
+  await workerPatch(id, { odpoved: text || null });
 }
 
 async function deleteNamet(id) {
   if (!confirm('Naozaj chcete vymazať tento nápad?')) return;
-  await sb.from(TABLE).delete().eq('id', id);
+  await fetch(`${WORKER_URL}/ideas/${id}`, {
+    method:  'DELETE',
+    headers: { 'Authorization': `Bearer ${adminToken}` },
+  });
   await loadNamety();
 }
-
-// ════════════════════════════════
-//  INIT
-// ════════════════════════════════
-window.addEventListener('DOMContentLoaded', () => {
-  if (loadConfig()) showScreen('role');
-});
 </script>
 </body>
 </html>
